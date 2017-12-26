@@ -19,9 +19,9 @@ module.exports = app => {
   router.put('/api/user/:id', controller.user.update)
 
   // jwt
-  router.all('/jwt', app.jwt, controller.jwt.index)
-  router.all('/jwt/login', controller.jwt.login)
-  router.all('/jwt/success', app.jwt, controller.jwt.success)
+  // router.all('/jwt', app.jwt, controller.jwt.index)
+  // router.all('/jwt/login', controller.jwt.login)
+  // router.all('/jwt/success', app.jwt, controller.jwt.success)
 
   // upload
   router.post('/api/upload', controller.upload.add)
@@ -32,5 +32,9 @@ module.exports = app => {
   router.get('/api/upload/:id', controller.upload.fetch)
   router.get('/api/upload', controller.upload.fetchAll)
 
+  // userAccess
+  router.post('/api/user/access/login', controller.userAccess.login)
+  router.get('/api/user/access/logout', controller.userAccess.logout)
+  router.put('/api/user/access/resetPsw', app.jwt, controller.userAccess.resetPsw)
 
 }

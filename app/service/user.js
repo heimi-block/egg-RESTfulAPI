@@ -41,6 +41,18 @@ class UserService extends Service {
     return this.ctx.model.User.findById(id).populate('role')
   }
 
+  async findByMobile(mobile) {
+    return this.ctx.model.User.findOne({mobile: mobile})
+  }
+
+  async findById(id) {
+    return this.ctx.model.User.findById(id).populate('role')
+  }
+
+  async findByIdAndUpdate(id, values) {
+    return this.ctx.model.User.findByIdAndUpdate(id, values)
+  }
+
   async fetchAll(pageable) {
     const { currentPage, pageSize, isPaging, search } = pageable
     let res = []

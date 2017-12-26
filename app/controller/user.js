@@ -65,25 +65,7 @@ class UserController extends Controller {
 
   // 修改密码
   async update() {
-    const { ctx, service } = this
-    // 校验参数
-    ctx.validate(this.createPswRule)
-    // 组装参数
-    const { id } = ctx.params
-    const values = ctx.request.body || {}
-    // 调用 Service
-    const result = await service.user.updatePsw(id, values)
-    // 设置响应内容和响应状态码
-    if(result === 116){
-      ctx.helper.handleError( { ctx, message:'密码修改失败，用户不存在', result })
-    }else if(result === 115){
-      ctx.helper.handleError( { ctx, message:'密码修改失败，旧密码验证失败', result })      
-    }else if(result === 117){
-      ctx.helper.handleError( { ctx, message:'密码修改失败，新旧密码相同', result })            
-    }else{
-      result.password = 'what the fuck'
-      ctx.helper.handleSuccess( { ctx, message:'密码修改成功', result })
-    }
+
   }
   
   // 获取单个角色
