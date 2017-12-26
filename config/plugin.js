@@ -15,7 +15,7 @@ exports.mongoose = {
   package: 'egg-mongoose',
 }
 
-exports.oAuth2Server = {
+exports.jwt = {
   enable: true,
-  package: 'egg-oauth2-server',
+  package: 'egg-jwt',
 }

@@ -27,12 +27,6 @@ module.exports = appInfo => {
     saltRounds: 10 // default 10
   }
 
-  config.oAuth2Server = {
-    debug: config.env === 'local',
-    grants: [ 'password' ],
-    accessTokenLifetime: 60480
-  }
-
   config.mongoose = {
     url: 'mongodb://127.0.0.1:27017/egg_x',
     options: {
@@ -41,6 +35,12 @@ module.exports = appInfo => {
       reconnectTries: Number.MAX_VALUE,
       bufferMaxEntries: 0,
     },
+  }
+
+  config.jwt = {
+    secret: 'Great4-M',
+    enable: true, // default is false
+    // match: '/jwt/success', // optional
   }
 
   return config
