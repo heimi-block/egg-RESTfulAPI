@@ -1,6 +1,6 @@
-# egg-x
+# egg-RESTfulAPI
 
-Egg.js new!
+A optimized Node.js RESTful API Server Template based on egg.js!
 
 ## 快速入门
 
