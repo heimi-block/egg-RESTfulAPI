@@ -1,29 +1,41 @@
 const Service = require('egg').Service
 
 class RoleService extends Service {
-
-  async add(payload) {
+  // create======================================================================================================>
+  async create(payload) {
     return this.ctx.model.Role.create(payload) 
   }
-  
-  async remove(payload) {
-    return this.ctx.model.Role.findByIdAndRemove(payload)
+
+  // destory======================================================================================================>  
+  async destory(_id) {
+    const role = await this.ctx.service.role.find(_id)
+    if (!role) {
+      this.ctx.throw(404, 'role not found')
+    }
+    return this.ctx.model.Role.findByIdAndRemove(_id)
   }
 
-  async removeAll(values) {
-    return this.ctx.model.Role.remove({ _id: { $in: values } })
+  // update======================================================================================================>
+  async update(_id, payload) {
+    const role = await this.ctx.service.role.find(_id)
+    if (!role) {
+      this.ctx.throw(404, 'role not found')
+    }
+    return this.ctx.model.Role.findByIdAndUpdate(_id, payload)
   }
 
-  async update(id, values) {
-    return this.ctx.model.Role.findByIdAndUpdate(id, values)
+  // show======================================================================================================>
+  async show(_id) {
+    const role = await this.ctx.service.role.find(_id)
+    if (!role) {
+      this.ctx.throw(404, 'role not found')
+    }
+    return this.ctx.model.Role.findById(_id)
   }
 
-  async fetch(id) {
-    return this.ctx.model.Role.findById(id)
-  }
-
-  async fetchAll(pageable) {
-    const { currentPage, pageSize, isPaging, search } = pageable
+  // index======================================================================================================>
+  async index(payload) {
+    const { currentPage, pageSize, isPaging, search } = payload
     let res = []
     let count = 0
     let skip = ((Number(currentPage)) - 1) * Number(pageSize || 10)
@@ -44,8 +56,7 @@ class RoleService extends Service {
         count = await this.ctx.model.Role.count({}).exec()
       }
     }
-
-    // 整理数据源
+    // 整理数据源 -> Ant Design Pro
     let data = res.map((e,i) => {
       const jsonObject = Object.assign({}, e._doc)
       jsonObject.key = i
@@ -54,6 +65,16 @@ class RoleService extends Service {
     })
 
     return { count: count, data: data, pageSize: Number(pageSize), currentPage: Number(currentPage) }
+  }
+
+  // removes======================================================================================================>
+  async removes(values) {
+    return this.ctx.model.Role.remove({ _id: { $in: values } })
+  }
+
+  // Commons======================================================================================================>
+  async find(id) {
+    return this.ctx.model.Role.findById(id)
   }
 
 }

@@ -11,44 +11,17 @@ class RoleController extends Controller {
   }
 
   // 创建角色
-  async add() {
+  async create() {
     const { ctx, service } = this
     // 校验参数
     ctx.validate(this.createRule)
     // 组装参数
     const payload = ctx.request.body || {}
     // 调用 Service 进行业务处理
-    const result = await service.role.add(payload)
+    const res = await service.role.create(payload)
     // 设置响应内容和响应状态码
-    ctx.helper.handleSuccess( { ctx, message:'角色创建成功', result } )
-  }
-
-  // 删除角色
-  async remove() {
-    const { ctx, service } = this
-    // 校验参数
-    const { id } = ctx.params
-    // 调用 Service
-    const result = await service.role.remove(id)
-    // 设置响应内容和响应状态码
-    if(!result){
-      ctx.helper.handleError( { ctx, message:'删除失败，该角色不存在', result })
-    }else
-      ctx.helper.handleSuccess( { ctx, message:'角色删除成功', result })
-  }
-
-  // 删除所选角色(条件id[]=>?id=1&id=2..)
-  async removeAll() {
-    const { ctx, service } = this
-    // 组装参数
-    const values = ctx.queries.id
-    // 调用 Service
-    const result = await service.role.removeAll(values)
-    // 设置响应内容和响应状态码
-    if(!result){
-      ctx.helper.handleError( { ctx, message:'角色删除失败，参数传入错误', result })
-    }else
-      ctx.helper.handleSuccess( { ctx, message:'角色删除成功', result })
+    ctx.body = res
+    ctx.status = 201
   }
 
   // 修改角色
@@ -58,44 +31,59 @@ class RoleController extends Controller {
     ctx.validate(this.createRule)
     // 组装参数
     const { id } = ctx.params
-    const values = ctx.request.body || {}
-    // 调用 Service
-    const result = await service.role.update(id, values)
+    const payload = ctx.request.body || {}
+    // 调用 Service 进行业务处理
+    await service.role.update(id, payload)
     // 设置响应内容和响应状态码
-    if(!result){
-      ctx.helper.handleError( { ctx, message:'修改失败，该角色不存在', result })
-    }else
-      ctx.helper.handleSuccess( { ctx, message:'角色修改成功', result })
+    ctx.status = 201
   }
 
   // 获取单个角色
-  async fetch() {
+  async show() {
     const { ctx, service } = this
     // 组装参数
     const { id } = ctx.params
-    // 调用 Service
-    const result = await service.role.fetch(id)
+    // 调用 Service 进行业务处理
+    const res = await service.role.show(id)
     // 设置响应内容和响应状态码
-    if(!result){
-      ctx.helper.handleError( { ctx, message:'获取失败，该角色不存在', result })
-    }else
-      ctx.helper.handleSuccess( { ctx, message:'角色获取成功', result })    
+    ctx.body = res
+    ctx.status = 200
   }
 
   // 获取所有角色(分页/模糊)
-  async fetchAll() {
+  async index() {
     const { ctx, service } = this
     // 组装参数
-    const pageable = ctx.query
-    // 调用 Service
-    const result = await service.role.fetchAll(pageable)
+    const payload = ctx.query
+    // 调用 Service 进行业务处理
+    const res = await service.role.index(payload)
     // 设置响应内容和响应状态码
-    if(!result){
-      ctx.helper.handleError( { ctx, message:'角色列表获取失败，参数传入错误', result })
-    }else
-      ctx.helper.handleSuccess( { ctx, message:'角色列表获取成功', result })       
+    ctx.body = res
+    ctx.status = 200
   }
 
+  // 删除单个角色
+  async destory() {
+    const { ctx, service } = this
+    // 校验参数
+    const { id } = ctx.params
+    // 调用 Service 进行业务处理
+    await service.role.destory(id)
+    // 设置响应内容和响应状态码
+    ctx.status = 204
+  }
+
+  // 删除所选角色(条件id[])
+  async removes() {
+    const { ctx, service } = this
+    // 组装参数
+    // const payload = ctx.queries.id
+    const payload = ctx.request.body.id
+    // 调用 Service 进行业务处理
+    const result = await service.role.removes(payload)
+    // 设置响应内容和响应状态码
+    ctx.status = 204
+  }
 
 }
 
