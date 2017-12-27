@@ -8,20 +8,22 @@ class RoleService extends Service {
 
   // destory======================================================================================================>  
   async destory(_id) {
-    const role = await this.ctx.service.role.find(_id)
+    const { ctx, service } = this
+    const role = await ctx.service.role.find(_id)
     if (!role) {
-      this.ctx.throw(404, 'role not found')
+      ctx.throw(404, 'role not found')
     }
-    return this.ctx.model.Role.findByIdAndRemove(_id)
+    return ctx.model.Role.findByIdAndRemove(_id)
   }
 
   // update======================================================================================================>
   async update(_id, payload) {
-    const role = await this.ctx.service.role.find(_id)
+    const { ctx, service } = this
+    const role = await ctx.service.role.find(_id)
     if (!role) {
-      this.ctx.throw(404, 'role not found')
+      ctx.throw(404, 'role not found')
     }
-    return this.ctx.model.Role.findByIdAndUpdate(_id, payload)
+    return ctx.model.Role.findByIdAndUpdate(_id, payload)
   }
 
   // show======================================================================================================>

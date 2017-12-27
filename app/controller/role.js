@@ -23,6 +23,17 @@ class RoleController extends Controller {
     ctx.body = res
     ctx.status = 201
   }
+  
+  // 删除单个角色
+  async destory() {
+    const { ctx, service } = this
+    // 校验参数
+    const { id } = ctx.params
+    // 调用 Service 进行业务处理
+    await service.role.destory(id)
+    // 设置响应内容和响应状态码
+    ctx.status = 204
+  }
 
   // 修改角色
   async update() {
@@ -60,17 +71,6 @@ class RoleController extends Controller {
     // 设置响应内容和响应状态码
     ctx.body = res
     ctx.status = 200
-  }
-
-  // 删除单个角色
-  async destory() {
-    const { ctx, service } = this
-    // 校验参数
-    const { id } = ctx.params
-    // 调用 Service 进行业务处理
-    await service.role.destory(id)
-    // 设置响应内容和响应状态码
-    ctx.status = 204
   }
 
   // 删除所选角色(条件id[])

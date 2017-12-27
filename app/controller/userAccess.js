@@ -45,9 +45,9 @@ class UserAccessController extends Controller {
     // 校验参数
     ctx.validate(this.UserResetPswTransfer)
     // 组装参数
-    const values = ctx.request.body || {}
+    const payload = ctx.request.body || {}
     // 调用 Service 进行业务处理
-    await service.userAccess.resetPsw(values)
+    await service.userAccess.resetPsw(payload)
     // 设置响应内容和响应状态码
     ctx.status = 201
   }

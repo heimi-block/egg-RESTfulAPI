@@ -1,66 +1,47 @@
 const Service = require('egg').Service
 
 class UserService extends Service {
-
-  async add(payload) {
+  // create======================================================================================================>
+  async create(payload) {
+    const { ctx, service } = this
+    const role = await service.role.fetch(payload.role)
+    if (!role) {
+      ctx.throw(404, 'role is not found')
+    }
     payload.password = await this.ctx.genHash(payload.password)
-    return this.ctx.model.User.create(payload)
+    return ctx.model.User.create(payload)
   }
 
-  async remove(payload) {
-    return this.ctx.model.User.findByIdAndRemove(payload)
-  }
-
-  async removeAll(values) {
-    return this.ctx.model.User.remove({ _id: { $in: values } })
-  }
-
-  async updatePsw(id, values) {
-    const WRONG_PSW = 115
-    const WRONG_USER = 116
-    const WRONG_STATUS = 117
-    let dbPwd = await this.ctx.model.User.findById(id).select('password').exec()
-    if(!dbPwd.password){
-      return WRONG_USER
+  // destory======================================================================================================>  
+  async destory(_id) {
+    const { ctx, service } = this
+    const user = await ctx.service.user.find(_id)
+    if (!user) {
+      ctx.throw(404, 'user not found')
     }
-    let verifing = await this.ctx.compare(values.oldPassword, dbPwd.password)
-    if(verifing){
-      let isSame = await this.ctx.compare(values.password, dbPwd.password)
-      if(isSame){
-        return WRONG_STATUS
-      }else{
-        values.password = await this.ctx.genHash(values.password)
-        return this.ctx.model.User.findByIdAndUpdate(id, values)
-      }
-    }else{
-      return WRONG_PSW
+    return ctx.model.User.findByIdAndRemove(_id)
+  }
+
+  // update(暂时无修改用户属性的业务)======================================================================================================>
+
+  // show======================================================================================================>
+  async show(_id) {
+    const user = await this.ctx.service.user.find(_id)
+    if (!user) {
+      this.ctx.throw(404, 'user not found')
     }
+    return this.ctx.model.User.findById(_id)
   }
 
-  async fetch(id) {
-    return this.ctx.model.User.findById(id).populate('role')
-  }
-
-  async findByMobile(mobile) {
-    return this.ctx.model.User.findOne({mobile: mobile})
-  }
-
-  async findById(id) {
-    return this.ctx.model.User.findById(id).populate('role')
-  }
-
-  async findByIdAndUpdate(id, values) {
-    return this.ctx.model.User.findByIdAndUpdate(id, values)
-  }
-
-  async fetchAll(pageable) {
-    const { currentPage, pageSize, isPaging, search } = pageable
+  // index======================================================================================================>
+  async index(payload) {
+    const { currentPage, pageSize, isPaging, search } = payload
     let res = []
     let count = 0
     let skip = ((Number(currentPage)) - 1) * Number(pageSize || 10)
     if(isPaging) {
       if(search) {
-        res = await this.ctx.model.User.find({realName: { $regex: search } }).populate('role').skip(skip).limit(Number(pageSize)).sort({ createdAt: -1 }).exec()
+        res = await this.ctx.model.User.find({name: { $regex: search } }).populate('role').skip(skip).limit(Number(pageSize)).sort({ createdAt: -1 }).exec()
         count = res.length
       } else {
         res = await this.ctx.model.User.find({}).populate('role').skip(skip).limit(Number(pageSize)).sort({ createdAt: -1 }).exec()
@@ -68,25 +49,44 @@ class UserService extends Service {
       }
     } else {
       if(search) {
-        res = await this.ctx.model.User.find({realName: { $regex: search } }).populate('role').sort({ createdAt: -1 }).exec()
+        res = await this.ctx.model.User.find({name: { $regex: search } }).populate('role').sort({ createdAt: -1 }).exec()
         count = res.length
       } else {
         res = await this.ctx.model.User.find({}).populate('role').sort({ createdAt: -1 }).exec()
         count = await this.ctx.model.User.count({}).exec()
       }
     }
-
-    // 整理数据源
+    // 整理数据源 -> Ant Design Pro
     let data = res.map((e,i) => {
       const jsonObject = Object.assign({}, e._doc)
       jsonObject.key = i
-      jsonObject.password = 'what the fuck'
+      jsonObject.password = 'Are you ok?'
       jsonObject.createdAt = this.ctx.helper.formatTime(e.createdAt)
       return jsonObject
     })
 
     return { count: count, data: data, pageSize: Number(pageSize), currentPage: Number(currentPage) }
+  }  
+  
+
+  async removes(payload) {
+    return this.ctx.model.User.remove({ _id: { $in: payload } })
   }
+
+  // Commons======================================================================================================>
+  async findByMobile(mobile) {
+    return this.ctx.model.User.findOne({mobile: mobile})
+  }
+
+  async find(id) {
+    return this.ctx.model.User.findById(id).populate('role')
+  }
+
+  async findByIdAndUpdate(id, values) {
+    return this.ctx.model.User.findByIdAndUpdate(id, values)
+  }
+
+  
 
 }
 

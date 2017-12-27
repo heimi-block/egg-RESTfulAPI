@@ -10,7 +10,7 @@ class UserAccessService extends Service {
     if(!user){
       ctx.throw(404, 'user not found')
     }
-    let verifyPsw = await this.ctx.compare(payload.password, user.password)
+    let verifyPsw = await ctx.compare(payload.password, user.password)
     if(!verifyPsw) {
       ctx.throw(404, 'user password is error')
     }
@@ -25,7 +25,7 @@ class UserAccessService extends Service {
     const { ctx, service } = this
     // ctx.state.user 可以提取到JWT编码的data
     const _id = ctx.state.user.data._id
-    const user = await service.user.findById(_id)
+    const user = await service.user.find(_id)
     if (!user) {
       ctx.throw(404, 'user is not found')
     }
