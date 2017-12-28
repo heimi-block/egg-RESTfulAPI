@@ -116,12 +116,12 @@ class UploadController extends Controller {
   }
 
   // 删除单个文件
-  async destory() {
+  async destroy() {
     const { ctx, service } = this
     // 校验参数
     const { id } = ctx.params
     // 调用 Service 进行业务处理
-    await service.upload.destory(id)
+    await service.upload.destroy(id)
     // 设置响应内容和响应状态码
     ctx.helper.success({ctx})
   }
@@ -199,7 +199,7 @@ class UploadController extends Controller {
     // 设置响应内容和响应状态码
     for (let attachment of payload) {
       // 调用 Service 进行业务处理
-      await service.upload.destory(attachment)
+      await service.upload.destroy(attachment)
     }
     // 设置响应内容和响应状态码
     ctx.helper.success({ctx})

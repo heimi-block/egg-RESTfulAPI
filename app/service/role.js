@@ -6,8 +6,8 @@ class RoleService extends Service {
     return this.ctx.model.Role.create(payload) 
   }
 
-  // destory======================================================================================================>  
-  async destory(_id) {
+  // destroy======================================================================================================>  
+  async destroy(_id) {
     const { ctx, service } = this
     const role = await ctx.service.role.find(_id)
     if (!role) {
@@ -66,7 +66,7 @@ class RoleService extends Service {
       return jsonObject
     })
 
-    return { count: count, data: data, pageSize: Number(pageSize), currentPage: Number(currentPage) }
+    return { count: count, list: data, pageSize: Number(pageSize), currentPage: Number(currentPage) }
   }
 
   // removes======================================================================================================>

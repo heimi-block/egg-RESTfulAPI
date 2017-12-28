@@ -8,7 +8,7 @@ module.exports = app => {
 
   // role
   // router.post('/api/role', controller.role.create)
-  // router.delete('/api/role/:id', controller.role.destory)
+  // router.delete('/api/role/:id', controller.role.destroy)
   // router.put('/api/role/:id', controller.role.update)
   // router.get('/api/role/:id', controller.role.show)
   // router.get('/api/role', controller.role.index)
@@ -23,7 +23,7 @@ module.exports = app => {
 
   // user
   // router.post('/api/user', controller.user.create)
-  // router.delete('/api/user/:id', controller.user.destory)
+  // router.delete('/api/user/:id', controller.user.destroy)
   // router.put('/api/user/:id', controller.user.update)
   // router.get('/api/user/:id', controller.user.show)
   // router.get('/api/user', controller.user.index)
@@ -34,7 +34,7 @@ module.exports = app => {
   router.post('/api/upload', controller.upload.create)
   router.post('/api/upload/url', controller.upload.url)
   router.post('/api/uploads', controller.upload.multiple)
-  router.delete('/api/upload/:id', controller.upload.destory)
+  router.delete('/api/upload/:id', controller.upload.destroy)
   router.put('/api/upload/:id', controller.upload.update)
   router.put('/api/upload/:id/extra', controller.upload.extra)
   router.get('/api/upload/:id', controller.upload.show)

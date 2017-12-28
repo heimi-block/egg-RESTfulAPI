@@ -27,8 +27,8 @@ class UploadService extends Service {
     return this.ctx.model.Attachment.create(payload) 
   }
 
-  // destory======================================================================================================>  
-  async destory(_id) {
+  // destroy======================================================================================================>  
+  async destroy(_id) {
     const { ctx, service } = this
     const attachment = await ctx.service.upload.find(_id)
     if (!attachment) {

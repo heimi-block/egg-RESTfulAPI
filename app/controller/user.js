@@ -31,12 +31,12 @@ class UserController extends Controller {
   }
 
   // 删除单个用户
-  async destory() {
+  async destroy() {
     const { ctx, service } = this
     // 校验参数
     const { id } = ctx.params
     // 调用 Service 进行业务处理
-    await service.user.destory(id)
+    await service.user.destroy(id)
     // 设置响应内容和响应状态码
     ctx.helper.success({ctx})
   }

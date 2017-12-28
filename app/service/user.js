@@ -12,8 +12,8 @@ class UserService extends Service {
     return ctx.model.User.create(payload)
   }
 
-  // destory======================================================================================================>  
-  async destory(_id) {
+  // destroy======================================================================================================>  
+  async destroy(_id) {
     const { ctx, service } = this
     const user = await ctx.service.user.find(_id)
     if (!user) {
