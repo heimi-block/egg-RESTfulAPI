@@ -1,0 +1,1 @@
+ctx.state.user jwt验证通过，可以获取到之前加密的data,如获取到该token对应的user

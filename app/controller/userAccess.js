@@ -51,6 +51,13 @@ class UserAccessController extends Controller {
     ctx.helper.success({ctx})
   }
 
+  async current() {
+    const { ctx, service } = this
+    const res = await service.userAccess.current()
+    // 设置响应内容和响应状态码
+    ctx.helper.success({ctx, res})
+  }
+
 }
 
 module.exports = UserAccessController
