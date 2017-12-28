@@ -3,7 +3,7 @@ const path = require('path')
 const Controller = require('egg').Controller
 const awaitWriteStream = require('await-stream-ready').write
 const sendToWormhole = require('stream-wormhole')
-
+const download = require('image-downloader')
 
 class UploadController extends Controller {
   constructor (ctx){
@@ -29,6 +29,32 @@ class UploadController extends Controller {
     // 设置响应内容和响应状态码
     ctx.body = res
     ctx.status = 200
+  }
+
+  // 通过URL添加单个图片: 如果网络地址不合法，EGG会返回500错误
+  async url() {
+    const { ctx, service } = this
+    // 组装参数
+    const attachment = new this.ctx.model.Attachment
+    const { url } = ctx.request.body
+    const extname = path.extname(url).toLowerCase() // 文件扩展名称
+    const options = {
+      url: url,
+      dest: path.join(this.config.baseDir, 'app/public/uploads', `${attachment._id.toString()}${extname}`)
+    }
+    let res    
+    try {
+      // 写入文件 const { filename, image}
+      await download.image(options)
+      attachment.extname = extname
+      attachment.url = `/uploads/${attachment._id.toString()}${extname}`
+      res = await service.upload.add(attachment)
+    } catch (err) {
+      throw err
+    }
+    // 设置响应内容和响应状态码
+    ctx.body = res
+    ctx.status = 200    
   }
 
   // 上传多个文件

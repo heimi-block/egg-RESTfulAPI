@@ -19,6 +19,11 @@ class UploadService extends Service {
       await sendToWormhole(stream)
       throw err
     }
+    return ctx.model.Attachment.create(payload) 
+  }
+
+  // 通过URL上传会提前写入，这里只存到db
+  async add(payload) { 
     return this.ctx.model.Attachment.create(payload) 
   }
 
