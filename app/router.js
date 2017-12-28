@@ -35,6 +35,7 @@ module.exports = app => {
   router.post('/api/uploads', controller.upload.multiple)
   router.delete('/api/upload/:id', controller.upload.destory)
   router.put('/api/upload/:id', controller.upload.update)
+  router.put('/api/upload/:id/extra', controller.upload.extra)
   router.get('/api/upload/:id', controller.upload.show)
   router.get('/api/upload', controller.upload.index)
   // router.delete('/api/upload', controller.upload.removes)

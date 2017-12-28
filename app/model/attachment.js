@@ -4,7 +4,8 @@ module.exports = app => {
   const AttachmentSchema = new mongoose.Schema({
     extname: { type: String },
     url: { type: String },
-    extra: { type: mongoose.Schema.Types.Mixed },
+    filename: { type: String },
+    extra: {  type: String  },
     createdAt: { type: Date, default: Date.now }
   })
   

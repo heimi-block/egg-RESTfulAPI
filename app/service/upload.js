@@ -53,8 +53,17 @@ class UploadService extends Service {
     return attachment
   }
 
-  async update(id, values) {
-    return this.ctx.model.Attachment.findByIdAndUpdate(id, values)
+  async extra(_id, values) {
+    const { ctx, service } = this
+    const attachment = await ctx.service.upload.find(_id)
+    if (!attachment) {
+      ctx.throw(404, 'attachment not found')
+    }
+    return this.ctx.model.Attachment.findByIdAndUpdate(_id, values)
+  }
+
+  async update(_id, values) {
+    return this.ctx.model.Attachment.findByIdAndUpdate(_id, values)
   }
 
   // show======================================================================================================>

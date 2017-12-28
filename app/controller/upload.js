@@ -18,11 +18,12 @@ class UploadController extends Controller {
     // 上传文件必须在所有其他的 fields 后面，否则在拿到文件流时可能还获取不到 fields。
     const stream = await ctx.getFileStream()
     // 所有表单字段都能通过 `stream.fields` 获取到
-    // const filename = path.basename(stream.filename) // 文件名称
+    const filename = path.basename(stream.filename) // 文件名称
     const extname = path.extname(stream.filename).toLowerCase() // 文件扩展名称
     // 组装参数
     const attachment = new this.ctx.model.Attachment
     attachment.extname = extname
+    attachment.filename = filename
     attachment.url = `/uploads/${attachment._id.toString()}${extname}`
     // 调用 Service 进行业务处理
     const res = await service.upload.create(stream, attachment)
@@ -37,6 +38,7 @@ class UploadController extends Controller {
     // 组装参数
     const attachment = new this.ctx.model.Attachment
     const { url } = ctx.request.body
+    const filename = path.basename(url) // 文件名称
     const extname = path.extname(url).toLowerCase() // 文件扩展名称
     const options = {
       url: url,
@@ -47,6 +49,7 @@ class UploadController extends Controller {
       // 写入文件 const { filename, image}
       await download.image(options)
       attachment.extname = extname
+      attachment.filename = filename
       attachment.url = `/uploads/${attachment._id.toString()}${extname}`
       res = await service.upload.add(attachment)
     } catch (err) {
@@ -85,12 +88,13 @@ class UploadController extends Controller {
         // console.log('extname: ' + part.extname)
         // console.log('encoding: ' + part.encoding)
         // console.log('mime: ' + part.mime)
-        // const filename = part.filename.toLowerCase() // 文件名称
+        const filename = part.filename.toLowerCase() // 文件名称
         const extname = path.extname(part.filename).toLowerCase() // 文件扩展名称
         
         // 组装参数
         const attachment = new ctx.model.Attachment
         attachment.extname = extname
+        attachment.filename = filename
         attachment.url = `/uploads/${attachment._id.toString()}${extname}`
         // const target = path.join(this.config.baseDir, 'app/public/uploads', filename)
         const target = path.join(this.config.baseDir, 'app/public/uploads', `${attachment._id.toString()}${extname}`)        
@@ -134,10 +138,11 @@ class UploadController extends Controller {
     const attachment = await service.upload.updatePre(id)
     // 获取用户上传的替换文件
     const stream = await ctx.getFileStream()
-    // 文件扩展名称
-    const extname = path.extname(stream.filename).toLowerCase()
+    const extname = path.extname(stream.filename).toLowerCase() // 文件扩展名称
+    const filename = path.basename(stream.filename) // 文件名称
     // 组装更新参数
     attachment.extname = extname
+    attachment.filename = filename
     attachment.url = `/uploads/${attachment._id.toString()}${extname}`
     const target_U = path.join(this.config.baseDir, 'app/public/uploads', `${attachment._id}${extname}`)      
     const writeStream = fs.createWriteStream(target_U)
@@ -151,6 +156,17 @@ class UploadController extends Controller {
     }
     // 调用Service 保持原图片ID不变，更新其他属性
     await service.upload.update(id, attachment)
+    // 设置响应内容和响应状态码
+    ctx.status = 201
+  }
+
+  // 添加图片描述
+  async extra() {
+    const { ctx, service } = this
+    // 组装参数 
+    const { id } = ctx.params // 传入要修改的文档ID
+    const payload = ctx.request.body || {}
+    await service.upload.extra(id, payload)
     // 设置响应内容和响应状态码
     ctx.status = 201
   }
