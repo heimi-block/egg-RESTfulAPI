@@ -28,8 +28,7 @@ class UserAccessController extends Controller {
     // 调用 Service 进行业务处理
     const res = await service.userAccess.login(payload)
     // 设置响应内容和响应状态码
-    ctx.status = 200
-    ctx.body = res
+    ctx.helper.success({ctx, res})
   }
 
   async logout() {
@@ -37,7 +36,7 @@ class UserAccessController extends Controller {
     // 调用 Service 进行业务处理
     await service.userAccess.logout()
     // 设置响应内容和响应状态码
-    ctx.status = 200
+    ctx.helper.success({ctx})
   }
   
   async resetPsw() {
@@ -49,7 +48,7 @@ class UserAccessController extends Controller {
     // 调用 Service 进行业务处理
     await service.userAccess.resetPsw(payload)
     // 设置响应内容和响应状态码
-    ctx.status = 201
+    ctx.helper.success({ctx})
   }
 
 }

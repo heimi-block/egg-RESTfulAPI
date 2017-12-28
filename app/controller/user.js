@@ -27,8 +27,7 @@ class UserController extends Controller {
     // 调用 Service 进行业务处理
     const res = await service.user.create(payload)
     // 设置响应内容和响应状态码
-    ctx.body = res
-    ctx.status = 201
+    ctx.helper.success({ctx, res})
   }
 
   // 删除单个用户
@@ -39,7 +38,7 @@ class UserController extends Controller {
     // 调用 Service 进行业务处理
     await service.user.destory(id)
     // 设置响应内容和响应状态码
-    ctx.status = 204
+    ctx.helper.success({ctx})
   }
  
   // 获取单个用户
@@ -50,8 +49,7 @@ class UserController extends Controller {
     // 调用 Service 进行业务处理
     const res = await service.user.show(id)
     // 设置响应内容和响应状态码
-    ctx.body = res
-    ctx.status = 200
+    ctx.helper.success({ctx, res})
   }
 
   // 获取所有用户(分页/模糊)
@@ -62,8 +60,7 @@ class UserController extends Controller {
     // 调用 Service 进行业务处理
     const res = await service.user.index(payload)
     // 设置响应内容和响应状态码
-    ctx.body = res
-    ctx.status = 200
+    ctx.helper.success({ctx, res})
   }
 
   // 删除所选用户(条件id[])
@@ -75,7 +72,7 @@ class UserController extends Controller {
     // 调用 Service 进行业务处理
     const result = await service.user.removes(payload)
     // 设置响应内容和响应状态码
-    ctx.status = 204
+    ctx.helper.success({ctx})
   }
   
 }
