@@ -68,7 +68,8 @@ class UserController extends Controller {
     const { ctx, service } = this
     // 组装参数
     // const payload = ctx.queries.id
-    const payload = ctx.request.body.id
+    const { id } = ctx.request.body
+    const payload = id.split(',') || []
     // 调用 Service 进行业务处理
     const result = await service.user.removes(payload)
     // 设置响应内容和响应状态码

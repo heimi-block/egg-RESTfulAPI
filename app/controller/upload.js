@@ -195,7 +195,8 @@ class UploadController extends Controller {
     const { ctx, service } = this
     // 组装参数
     // const values = ctx.queries.id
-    const payload = ctx.request.body.id
+    const { id } = ctx.request.body
+    const payload = id.split(',') || []
     // 设置响应内容和响应状态码
     for (let attachment of payload) {
       // 调用 Service 进行业务处理
