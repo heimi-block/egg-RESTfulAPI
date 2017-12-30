@@ -4,7 +4,7 @@ class UserService extends Service {
   // create======================================================================================================>
   async create(payload) {
     const { ctx, service } = this
-    const role = await service.role.fetch(payload.role)
+    const role = await service.role.show(payload.role)
     if (!role) {
       ctx.throw(404, 'role is not found')
     }
