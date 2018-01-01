@@ -8,7 +8,7 @@
 - :fire: **数据模型**：基于 Mongoose 存储
 - :lock: **服务端验证**：基于JWT，需要Auth2.0验证代码的朋友请提issue
 - :rocket: **内置功能**：文件处理，用户系统，统一错误处理及接口返回标准，全方位CRUD,分页,模糊查询的等数据操作例子
-- :sparkles: **最佳实践**：接口设计视频 Ant Design Pro 或 微信小程序开发等。(内置分页及ant接口返回标准)
+- :sparkles: **最佳实践**：接口设计适配 Ant Design Pro 或 微信小程序开发等。(内置分页及ant接口返回标准)
 
 ## QuickStart
 
