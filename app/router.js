@@ -35,7 +35,8 @@ module.exports = app => {
   router.post('/api/upload/url', controller.upload.url)
   router.post('/api/uploads', controller.upload.multiple)
   router.delete('/api/upload/:id', controller.upload.destroy)
-  router.put('/api/upload/:id', controller.upload.update)
+  // router.put('/api/upload/:id', controller.upload.update)
+  router.post('/api/upload/:id', controller.upload.update) // Ant Design Pro
   router.put('/api/upload/:id/extra', controller.upload.extra)
   router.get('/api/upload/:id', controller.upload.show)
   router.get('/api/upload', controller.upload.index)
