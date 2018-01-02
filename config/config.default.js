@@ -17,6 +17,7 @@ module.exports = appInfo => {
     csrf: {
       enable: false,
     },
+    domainWhiteList: [ 'http://localhost:8000' ],
   }
 
   config.multipart = {

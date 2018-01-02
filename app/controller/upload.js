@@ -191,7 +191,7 @@ class UploadController extends Controller {
   }
 
   // 删除所选文件(条件id[])
-  async removeAll() {
+  async removes() {
     const { ctx, service } = this
     // 组装参数
     // const values = ctx.queries.id
