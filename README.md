@@ -19,6 +19,7 @@ see [egg docs][egg] for more detail.
 ### Development
 
 ```bash
+$ cd app & mkdir public & cd public & mkdir uploads
 $ npm i
 $ npm run dev
 $ open http://localhost:7001/
