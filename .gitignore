@@ -11,4 +11,4 @@ run/
 *.sw*
 *.un~
 .vscode/
-app/public/uploads/
+#app/public/uploads/
