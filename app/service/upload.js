@@ -77,27 +77,56 @@ class UploadService extends Service {
 
   // index======================================================================================================>
   async index(payload) {
-    let { currentPage, pageSize, isPaging, search } = payload
+    // 支持全部all 无需传入kind
+    // 图像kind = image ['.jpg', '.jpeg', '.png', '.gif']
+    // 文档kind = document ['.doc', '.docx', '.ppt', '.pptx', '.xls', '.xlsx', '.csv', '.key', '.numbers', '.pages', '.pdf', '.txt', '.psd', '.zip', '.gz', '.tgz', '.gzip' ]
+    // 视频kind = video ['.mov', '.mp4', '.avi']
+    // 音频kind = audio ['.mp3', '.wma', '.wav', '.ogg', '.ape', '.acc']
+
+    const attachmentKind = { 
+      image: ['.jpg', '.jpeg', '.png', '.gif'], 
+      document: ['.doc', '.docx', '.ppt', '.pptx', '.xls', '.xlsx', '.csv', '.key', '.numbers', '.pages', '.pdf', '.txt', '.psd', '.zip', '.gz', '.tgz', '.gzip' ],
+      video: ['.mov', '.mp4', '.avi'],
+      audio: ['.mp3', '.wma', '.wav', '.ogg', '.ape', '.acc']
+    }
+
+    let { currentPage, pageSize, isPaging, search, kind } = payload
     let res = []
     let count = 0
     let skip = ((Number(currentPage)) - 1) * Number(pageSize || 10)
     if(isPaging) {
       if(search) {
-        search = search.replace('/uploads/', '')
-        res = await this.ctx.model.Attachment.find({url: { $regex: search } }).skip(skip).limit(Number(pageSize)).sort({ createdAt: -1 }).exec()
+        if (kind) {
+          res = await this.ctx.model.Attachment.find({filename: { $regex: search }, extname: { $in: attachmentKind[`${kind}`]} }).skip(skip).limit(Number(pageSize)).sort({ createdAt: -1 }).exec()
+        }else{
+          res = await this.ctx.model.Attachment.find({filename: { $regex: search } }).skip(skip).limit(Number(pageSize)).sort({ createdAt: -1 }).exec()
+        }
         count = res.length
       } else {
-        res = await this.ctx.model.Attachment.find({}).skip(skip).limit(Number(pageSize)).sort({ createdAt: -1 }).exec()
-        count = await this.ctx.model.Attachment.count({}).exec()
+        if (kind) {
+          res = await this.ctx.model.Attachment.find({ extname: { $in: attachmentKind[`${kind}`]} }).skip(skip).limit(Number(pageSize)).sort({ createdAt: -1 }).exec()
+          count = await this.ctx.model.Attachment.count({ extname: { $in: attachmentKind[`${kind}`]} }).exec()
+        }else{
+          res = await this.ctx.model.Attachment.find({}).skip(skip).limit(Number(pageSize)).sort({ createdAt: -1 }).exec()
+          count = await this.ctx.model.Attachment.count({}).exec()
+        }
       }
     } else {
       if(search) {
-        search = search.replace('/uploads/', '')
-        res = await this.ctx.model.Attachment.find({url: { $regex: search } }).sort({ createdAt: -1 }).exec()
+        if (kind) {
+          res = await this.ctx.model.Attachment.find({filename: { $regex: search }, extname: { $in: attachmentKind[`${kind}`]} }).sort({ createdAt: -1 }).exec()
+        }else{
+          res = await this.ctx.model.Attachment.find({filename: { $regex: search }}).sort({ createdAt: -1 }).exec()
+        }
         count = res.length
       } else {
-        res = await this.ctx.model.Attachment.find({}).sort({ createdAt: -1 }).exec()
-        count = await this.ctx.model.Attachment.count({}).exec()
+        if (kind) {
+          res = await this.ctx.model.Attachment.find({extname: { $in: attachmentKind[`${kind}`]} }).sort({ createdAt: -1 }).exec()
+          count = await this.ctx.model.Attachment.count({ extname: { $in: attachmentKind[`${kind}`]} }).exec()
+        }else{
+          res = await this.ctx.model.Attachment.find({}).sort({ createdAt: -1 }).exec()
+          count = await this.ctx.model.Attachment.count({}).exec()
+        }
       }
     }
     // 整理数据源 -> Ant Design Pro
