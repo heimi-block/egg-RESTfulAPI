@@ -103,7 +103,7 @@ class UploadController extends Controller {
           // result = await ctx.oss.put('egg-multipart-test/' + part.filename, part)
           await awaitWriteStream(part.pipe(writeStream))
           // 调用Service
-          res = await service.upload.create(attachment)
+          res = await service.upload.add(attachment)
         } catch (err) {
           // 必须将上传的文件流消费掉，要不然浏览器响应会卡死
           await sendToWormhole(part)
