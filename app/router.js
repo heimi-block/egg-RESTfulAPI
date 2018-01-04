@@ -42,7 +42,4 @@ module.exports = app => {
   router.get('/api/upload', controller.upload.index)
   router.delete('/api/upload', controller.upload.removes)
   // router.resources('upload', '/api/upload', controller.upload)
-
-  // attachments
-  router.get('/api/attachments', controller.attachments.index)
 }
