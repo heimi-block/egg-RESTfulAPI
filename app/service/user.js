@@ -41,7 +41,7 @@ class UserService extends Service {
     let skip = ((Number(currentPage)) - 1) * Number(pageSize || 10)
     if(isPaging) {
       if(search) {
-        res = await this.ctx.model.User.find({name: { $regex: search } }).populate('role').skip(skip).limit(Number(pageSize)).sort({ createdAt: -1 }).exec()
+        res = await this.ctx.model.User.find({mobile: { $regex: search } }).populate('role').skip(skip).limit(Number(pageSize)).sort({ createdAt: -1 }).exec()
         count = res.length
       } else {
         res = await this.ctx.model.User.find({}).populate('role').skip(skip).limit(Number(pageSize)).sort({ createdAt: -1 }).exec()
@@ -49,7 +49,7 @@ class UserService extends Service {
       }
     } else {
       if(search) {
-        res = await this.ctx.model.User.find({name: { $regex: search } }).populate('role').sort({ createdAt: -1 }).exec()
+        res = await this.ctx.model.User.find({mobile: { $regex: search } }).populate('role').sort({ createdAt: -1 }).exec()
         count = res.length
       } else {
         res = await this.ctx.model.User.find({}).populate('role').sort({ createdAt: -1 }).exec()
