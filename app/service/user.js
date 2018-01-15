@@ -65,7 +65,7 @@ class UserService extends Service {
       return jsonObject
     })
 
-    return { count: count, data: data, pageSize: Number(pageSize), currentPage: Number(currentPage) }
+    return { count: count, list: data, pageSize: Number(pageSize), currentPage: Number(currentPage) }
   }  
   
 
