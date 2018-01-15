@@ -6,24 +6,7 @@ const Service = require('egg').Service
 
 class UploadService extends Service {
 
-  async create(stream, payload) {
-    const {ctx, service} = this
-    const target = path.join(this.config.baseDir, 'app/public/uploads', `${payload._id.toString()}${payload.extname}`)
-    const writeStream = fs.createWriteStream(target)
-    // 文件处理，上传到云存储等等
-    let res 
-    try {
-      await awaitWriteStream(stream.pipe(writeStream))
-    } catch (err) {
-      // 必须将上传的文件流消费掉，要不然浏览器响应会卡死
-      await sendToWormhole(stream)
-      throw err
-    }
-    return ctx.model.Attachment.create(payload) 
-  }
-
-  // 通过URL上传会提前写入，这里只存到db
-  async add(payload) { 
+  async create(payload) {
     return this.ctx.model.Attachment.create(payload) 
   }
 

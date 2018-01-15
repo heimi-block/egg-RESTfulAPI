@@ -4,24 +4,23 @@ class UserController extends Controller {
   constructor(ctx) {
     super(ctx)
 
-    this.createRule = {
+    this.UserCreateTransfer = {
       mobile: {type: 'string', required: true, allowEmpty: false, format: /^[0-9]{11}$/},
       password: {type: 'password', required: true, allowEmpty: false, min: 6},
       realName: {type: 'string', required: true, allowEmpty: false, format: /^[\u2E80-\u9FFF]{2,6}$/}
     }
 
-    this.createPswRule = {
-      password: {type: 'password', required: true, allowEmpty: false, min: 6},
-      oldPassword: {type: 'password', required: true, allowEmpty: false, min: 6},      
+    this.UserUpdateTransfer = {
+      mobile: { type: 'string', required: true, allowEmpty: false },
+      realName: {type: 'string', required: true, allowEmpty: false, format: /^[\u2E80-\u9FFF]{2,6}$/}
     }
-
   }
 
   // 创建用户
   async create() {
     const { ctx, service } = this
     // 校验参数
-    ctx.validate(this.createRule)
+    ctx.validate(this.UserCreateTransfer)
     // 组装参数
     const payload = ctx.request.body || {}
     // 调用 Service 进行业务处理
@@ -37,6 +36,20 @@ class UserController extends Controller {
     const { id } = ctx.params
     // 调用 Service 进行业务处理
     await service.user.destroy(id)
+    // 设置响应内容和响应状态码
+    ctx.helper.success({ctx})
+  }
+
+  // 修改用户
+  async update() {
+    const { ctx, service } = this
+    // 校验参数
+    ctx.validate(this.UserUpdateTransfer)
+    // 组装参数
+    const { id } = ctx.params
+    const payload = ctx.request.body || {}
+    // 调用 Service 进行业务处理
+    await service.user.update(id, payload)
     // 设置响应内容和响应状态码
     ctx.helper.success({ctx})
   }
@@ -75,7 +88,7 @@ class UserController extends Controller {
     // 设置响应内容和响应状态码
     ctx.helper.success({ctx})
   }
-  
+
 }
 
 

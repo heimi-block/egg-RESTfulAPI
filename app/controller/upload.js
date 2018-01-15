@@ -20,13 +20,24 @@ class UploadController extends Controller {
     // 所有表单字段都能通过 `stream.fields` 获取到
     const filename = path.basename(stream.filename) // 文件名称
     const extname = path.extname(stream.filename).toLowerCase() // 文件扩展名称
-    // 组装参数
+    // 组装参数 model
     const attachment = new this.ctx.model.Attachment
     attachment.extname = extname
     attachment.filename = filename
     attachment.url = `/uploads/${attachment._id.toString()}${extname}`
+    // 组装参数 stream
+    const target = path.join(this.config.baseDir, 'app/public/uploads', `${attachment._id.toString()}${attachment.extname}`)
+    const writeStream = fs.createWriteStream(target)
+    // 文件处理，上传到云存储等等
+    try {
+      await awaitWriteStream(stream.pipe(writeStream))
+    } catch (err) {
+      // 必须将上传的文件流消费掉，要不然浏览器响应会卡死
+      await sendToWormhole(stream)
+      throw err
+    }
     // 调用 Service 进行业务处理
-    const res = await service.upload.create(stream, attachment)
+    const res = await service.upload.create(attachment)
     // 设置响应内容和响应状态码
     ctx.helper.success({ctx, res})
   }
@@ -50,7 +61,7 @@ class UploadController extends Controller {
       attachment.extname = extname
       attachment.filename = filename
       attachment.url = `/uploads/${attachment._id.toString()}${extname}`
-      res = await service.upload.add(attachment)
+      res = await service.upload.create(attachment)
     } catch (err) {
       throw err
     }
@@ -103,7 +114,7 @@ class UploadController extends Controller {
           // result = await ctx.oss.put('egg-multipart-test/' + part.filename, part)
           await awaitWriteStream(part.pipe(writeStream))
           // 调用Service
-          res = await service.upload.add(attachment)
+          res = await service.upload.create(attachment)
         } catch (err) {
           // 必须将上传的文件流消费掉，要不然浏览器响应会卡死
           await sendToWormhole(part)

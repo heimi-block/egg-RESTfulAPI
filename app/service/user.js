@@ -22,7 +22,15 @@ class UserService extends Service {
     return ctx.model.User.findByIdAndRemove(_id)
   }
 
-  // update(暂时无修改用户属性的业务)======================================================================================================>
+  // update======================================================================================================>
+  async update(_id, payload) {
+    const { ctx, service } = this
+    const user = await ctx.service.user.find(_id)
+    if (!user) {
+      ctx.throw(404, 'user not found')
+    }
+    return ctx.model.User.findByIdAndUpdate(_id, payload)
+  }
 
   // show======================================================================================================>
   async show(_id) {

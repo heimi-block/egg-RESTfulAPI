@@ -52,6 +52,31 @@ class UserAccessService extends Service {
     return user
   }
 
+  // 修改个人信息
+  async resetSelf(values) {
+    const {ctx, service} = this
+    // 获取当前用户
+    const _id = ctx.state.user.data._id
+    const user = await service.user.find(_id)
+    if (!user) {
+      ctx.throw(404, 'user is not found')
+    }
+    return service.user.findByIdAndUpdate(_id, values)
+  }
+
+  // 更新头像
+  async resetAvatar(values) {
+    const {ctx, service} = this
+    await service.upload.create(values)
+    // 获取当前用户
+    const _id = ctx.state.user.data._id
+    const user = await service.user.find(_id)
+    if (!user) {
+      ctx.throw(404, 'user is not found')
+    }
+    return service.user.findByIdAndUpdate(_id, {avatar: values.url})
+  }
+
 }
 
 module.exports = UserAccessService
