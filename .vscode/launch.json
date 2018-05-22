@@ -1,0 +1,60 @@
+{
+  // 使用 IntelliSense 了解相关属性。 
+  // 悬停以查看现有属性的描述。
+  // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Egg Debug",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "debug"
+      ],
+      "console": "integratedTerminal",
+      "restart": true,
+      "protocol": "auto",
+      "port": 9999
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Egg Debug with brk",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "debug",
+        "--",
+        "--inspect-brk"
+      ],
+      "protocol": "inspector",
+      "port": 9229
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Egg Test",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "test-local",
+        "--",
+        "--inspect-brk"
+      ],
+      "protocol": "auto",
+      "port": 9229
+    },
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "Egg Attach to remote",
+      "localRoot": "${workspaceRoot}",
+      "remoteRoot": "/usr/src/app",
+      "address": "localhost",
+      "protocol": "auto",
+      "port": 9999
+    }
+  ]
+}

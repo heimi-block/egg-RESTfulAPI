@@ -10,5 +10,5 @@ run/
 .DS_Store
 *.sw*
 *.un~
-.vscode/
+#.vscode/
 app/public/uploads/
