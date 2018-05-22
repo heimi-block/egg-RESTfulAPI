@@ -38,7 +38,7 @@ class UserService extends Service {
     if (!user) {
       this.ctx.throw(404, 'user not found')
     }
-    return this.ctx.model.User.findById(_id)
+    return this.ctx.model.User.findById(_id).populate('role')
   }
 
   // index======================================================================================================>
@@ -87,7 +87,7 @@ class UserService extends Service {
   }
 
   async find(id) {
-    return this.ctx.model.User.findById(id).populate('role')
+    return this.ctx.model.User.findById(id)
   }
 
   async findByIdAndUpdate(id, values) {
